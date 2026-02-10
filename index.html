@@ -53,6 +53,30 @@
     .no-button {
       background: #ddd;
     }
+    #hearts {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.heart {
+  position: absolute;
+  bottom: -20px;
+  animation: floatUp linear forwards;
+  opacity: 0.9;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(0) scale(1);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateY(-110vh) scale(1.6);
+    opacity: 0;
+  }
+}
   </style>
 </head>
 
@@ -94,15 +118,42 @@
       yesBtn.style.fontSize = (currentSize * 1.3) + "px";
     }
 
- function handleYesClick() {
+function handleYesClick() {
   const card = document.querySelector(".card");
 
   card.innerHTML = `
-    <img class="gif" src="giphy3.gif" alt="valentine gif">
+    <img class="gif" src="giphy3.webp" alt="valentine gif">
     <h2>Good choice ❤️</h2>
     <p>You just made my day.</p>
     <button class="yes-button" onclick="location.reload()">Again</button>
   `;
+
+  startHearts();
+}
+
+function startHearts() {
+  let hearts = document.getElementById("hearts");
+
+  if (!hearts) {
+    hearts = document.createElement("div");
+    hearts.id = "hearts";
+    document.body.appendChild(hearts);
+  }
+
+  const spawnHeart = () => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.textContent = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (14 + Math.random() * 26) + "px";
+    heart.style.animationDuration = (2.5 + Math.random() * 2.5) + "s";
+    hearts.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 6000);
+  };
+
+  const interval = setInterval(spawnHeart, 200);
+  setTimeout(() => clearInterval(interval), 6000);
 }
   </script>
 
